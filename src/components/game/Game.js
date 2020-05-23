@@ -53,7 +53,8 @@ class Game extends React.Component {
             lastTurnEndScreenDate: null, // when the last TurnEndScreen was opened
             show: false, // modal window for alert when player closes the browser unexpectedly.
             messageBox: null, // In certain situations a message box is displayed for a few seconds for information purposes.
-            previousState: null
+            previousState: null,
+            gameOverview: false
         };
         this.updateGame = this.updateGame.bind(this);
         this.showModal = this.showModal.bind(this);
@@ -282,6 +283,8 @@ class Game extends React.Component {
     }
 
 
+
+
     render() {
 
         // delay until all the information is loaded
@@ -289,14 +292,6 @@ class Game extends React.Component {
             return <Spinner />
         }
 
-        // game has ended -> use separate screen
-        if (this.state.gameModel.gameStatus === "GAME_OVER") {
-            return <GameOverview
-                gameModel={this.state.gameModel}
-                users={this.state.users}
-                roundsPlayed={this.state.gameModel.round - 1}
-            />;
-        }
 
         // React component(s) that change depending on the game state.
         let timer = null;
@@ -412,6 +407,25 @@ class Game extends React.Component {
             );
         }
 
+        // game has ended -> use separate screen
+        if (this.state.gameModel.gameStatus === "GAME_OVER") {
+            changingElements = (
+                        <TurnEndScreen
+                            correct={this.state.guessCorrect}
+                            activeUser={this.state.previousState.activeUser}
+                            mysteryWord={this.state.previousState.gameModel.words[this.state.previousState.gameModel.wordIndex]}
+                        />
+                    );
+            setTimeout(function() {this.setState({gameOverview: true})}.bind(this), 3000);
+        }
+
+        if (this.state.gameOverview === true) {
+            return <GameOverview
+                gameModel={this.state.gameModel}
+                users={this.state.users}
+                roundsPlayed={this.state.gameModel.round - 1}
+            />
+        }
 
         // Code to display the users on left and right part of the game.
         let usersOnLeft = [];
