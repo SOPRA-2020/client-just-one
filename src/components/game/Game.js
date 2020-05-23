@@ -166,26 +166,28 @@ class Game extends React.Component {
             this.setFrontendGameStatus("GAME_OVER");
             clearInterval(this.state.updateTimer); // don't remove players who left during the game overview screen
         }
+        if(this.state.frontendGameStatus !== "GAME_OVER")
+        {
+            if ((prevState.gameModel.gameStatus === "AWAITING_CLUES" || prevState.gameModel.gameStatus === "AWAITING_GUESS") && (this.state.gameModel.gameStatus === "AWAITING_INDEX" || this.state.gameModel.gameStatus === "GAME_OVER")) {
+                this.setFrontendGameStatus("TURN_FINISHED");
+                this.setState({previousState: prevState});
 
-        if ((prevState.gameModel.gameStatus === "AWAITING_CLUES" || prevState.gameModel.gameStatus === "AWAITING_GUESS") && (this.state.gameModel.gameStatus === "AWAITING_INDEX" || this.state.gameModel.gameStatus === "GAME_OVER")) {
-            this.setFrontendGameStatus("TURN_FINISHED");
-            this.setState({previousState: prevState});
+                if (this.state.gameModel.wordsGuessedCorrect > prevState.gameModel.wordsGuessedCorrect) {
+                    this.setState({ guessCorrect: 'correct' });
+                }
+                else if (this.state.gameModel.wordsGuessedWrong > prevState.gameModel.wordsGuessedWrong) {
+                    this.setState({ guessCorrect: 'wrong' });
+                }
+                else if (prevState.gameModel.gameStatus !== "AWAITING_CLUES") {
+                    this.setState({ guessCorrect: 'skipped' });
+                }
+                else {
+                    this.setState({ guessCorrect: 'noValidClues' });
+                }
 
-            if (this.state.gameModel.wordsGuessedCorrect > prevState.gameModel.wordsGuessedCorrect) {
-                this.setState({ guessCorrect: 'correct' });
+                this.setState({ lastTurnEndScreenDate: Date.now() });
+                return;
             }
-            else if (this.state.gameModel.wordsGuessedWrong > prevState.gameModel.wordsGuessedWrong) {
-                this.setState({ guessCorrect: 'wrong' });
-            }
-            else if (prevState.gameModel.gameStatus !== "AWAITING_CLUES") {
-                this.setState({ guessCorrect: 'skipped' });
-            }
-            else {
-                this.setState({ guessCorrect: 'noValidClues' });
-            }
-            
-            this.setState({ lastTurnEndScreenDate: Date.now() });
-            return;
         }
     }
 
