@@ -162,6 +162,11 @@ class Game extends React.Component {
             this.setFrontendGameStatus("AWAITING_GUESS");
         }
 
+        if (this.state.gameModel.gameStatus === "GAME_OVER" && this.state.frontendGameStatus === "TURN_FINISHED") {
+            this.setFrontendGameStatus("GAME_OVER");
+            clearInterval(this.state.updateTimer); // don't remove players who left during the game overview screen
+        }
+
         if ((prevState.gameModel.gameStatus === "AWAITING_CLUES" || prevState.gameModel.gameStatus === "AWAITING_GUESS") && (this.state.gameModel.gameStatus === "AWAITING_INDEX" || this.state.gameModel.gameStatus === "GAME_OVER")) {
             this.setFrontendGameStatus("TURN_FINISHED");
             this.setState({previousState: prevState});
@@ -181,11 +186,6 @@ class Game extends React.Component {
             
             this.setState({ lastTurnEndScreenDate: Date.now() });
             return;
-        }
-
-        if (this.state.gameModel.gameStatus === "GAME_OVER") {
-            this.setFrontendGameStatus("GAME_OVER");
-            clearInterval(this.state.updateTimer); // don't remove players who left during the game overview screen
         }
     }
 
