@@ -294,7 +294,6 @@ class Game extends React.Component {
             return <GameOverview
                 gameModel={this.state.gameModel}
                 users={this.state.users}
-                roundsPlayed={this.state.gameModel.round - 1}
             />;
         }
 

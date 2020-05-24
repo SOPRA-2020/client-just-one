@@ -82,7 +82,7 @@ class GameOverview extends React.Component {
                         return <UserStats user={user} gameStats={this.state.gameStats} />
                       })}
                   </IndividualStatsContainer>
-                  <TeamStats gameStats={this.state.gameStats} roundsPlayed={this.props.roundsPlayed}/>
+                  <TeamStats gameStats={this.state.gameStats} gameModel={this.state.gameModel}/>
               </CenterContainer>
           </BaseContainer>
         );

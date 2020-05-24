@@ -11,10 +11,18 @@ export class TeamStats extends React.Component{
     }
 
     render() {
-        let skippedCount = 13 - this.props.gameStats.wordsGuessedCorrect - 2*this.props.gameStats.wordsGuessedWrong;
-        if (13 - this.props.gameStats.wordsGuessedWrong !== this.props.roundsPlayed) {
+
+        let cardsUsed = 13; // Number of cards which were used. Is 13, unless game ends prematurely (player left).
+
+        // game ended because players left -> maybe not all rounds played
+        if (this.props.gameModel.playerIds.length < 3) {
+            cardsUsed = this.props.gameStats.wordsGuessedCorrect - 2 * this.props.gameStats.wordsGuessedWrong;
+        }
+
+        let skippedCount = cardsUsed - this.props.gameStats.wordsGuessedCorrect - 2 * this.props.gameStats.wordsGuessedWrong;
+        if (cardsUsed - this.props.gameStats.wordsGuessedWrong !== (this.props.gameModel.round - 1)) {
             // last word was wrong -> -1 words left -> add 1 to skippedCount
-            skippedCount = 13 - this.props.gameStats.wordsGuessedCorrect - 2*this.props.gameStats.wordsGuessedWrong + 1;
+            skippedCount = cardsUsed - this.props.gameStats.wordsGuessedCorrect - 2 * this.props.gameStats.wordsGuessedWrong + 1;
         }
 
         return (
