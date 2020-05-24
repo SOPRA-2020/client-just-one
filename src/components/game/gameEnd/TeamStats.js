@@ -16,7 +16,7 @@ export class TeamStats extends React.Component{
 
         // game ended because players left -> maybe not all rounds played
         if (this.props.gameModel.playerIds.length < 3) {
-            cardsUsed = this.props.gameStats.wordsGuessedCorrect - 2 * this.props.gameStats.wordsGuessedWrong;
+            cardsUsed = this.props.gameStats.wordsGuessedCorrect + 2 * this.props.gameStats.wordsGuessedWrong;
         }
 
         let skippedCount = cardsUsed - this.props.gameStats.wordsGuessedCorrect - 2 * this.props.gameStats.wordsGuessedWrong;
